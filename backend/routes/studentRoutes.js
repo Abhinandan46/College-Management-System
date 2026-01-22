@@ -1,0 +1,13 @@
+const express = require('express');
+const { registerStudent, loginStudent, submitAdmission, getProfile, getResults, downloadAdmitCard, registerAdmin } = require('../controllers/studentController');
+const router = express.Router();
+const auth = require("../middleware/authMiddleware");
+const admin = require("../middleware/adminMiddleware");
+router.post('/register', registerStudent);
+router.post('/register-admin', auth, admin, registerAdmin);
+router.post('/login', loginStudent); 
+router.post("/admission", auth, submitAdmission);
+router.get("/profile", auth, getProfile);
+router.get("/results", auth, getResults);
+router.get("/admit-card", auth, downloadAdmitCard);
+module.exports = router;
