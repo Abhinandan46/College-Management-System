@@ -114,3 +114,64 @@ exports.downloadAdmitCard = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const student = await Student.findById(req.user.id);
+
+    const isMatch = await bcrypt.compare(currentPassword, student.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    student.password = hashedPassword;
+    await student.save();
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, address, phone, dob } = req.body;
+    const student = await Student.findByIdAndUpdate(
+      req.user.id,
+      { name, address, phone, dob },
+      { new: true }
+    ).select("-password");
+    res.json({ message: 'Profile updated successfully', student });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.downloadCertificate = async (req, res) => {
+  try {
+    const student = await Student.findById(req.user.id);
+
+    const doc = new PDFDocument();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${student.name}_certificate.pdf`);
+
+    doc.pipe(res);
+
+    doc.fontSize(20).text('Certificate of Enrollment', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(16).text('This is to certify that', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(18).text(student.name, { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(14).text(`has been enrolled in ${student.course}`, { align: 'center' });
+    doc.text(`Admission Status: ${student.admissionStatus}`, { align: 'center' });
+    doc.moveDown();
+    doc.text(`Date of Issue: ${new Date().toLocaleDateString()}`, { align: 'center' });
+
+    doc.end();
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};

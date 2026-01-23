@@ -1,11 +1,25 @@
 const express = require('express');
-const { getAllStudents, updateStudentStatus, deleteStudent } = require('../controllers/adminController');
+const {
+  getDashboardStats,
+  getAllStudents,
+  updateStudentStatus,
+  deleteStudent,
+  addStudentResult,
+  updateStudentResult,
+  generateStudentReport,
+  generateFeeReport
+} = require('../controllers/adminController');
 const auth = require('../middleware/authMiddleware');
 const admin = require('../middleware/adminMiddleware');
 const router = express.Router();
 
+router.get('/dashboard-stats', auth, admin, getDashboardStats);
 router.get('/students', auth, admin, getAllStudents);
 router.put('/students/:id', auth, admin, updateStudentStatus);
 router.delete('/students/:id', auth, admin, deleteStudent);
+router.post('/results', auth, admin, addStudentResult);
+router.put('/results/:id', auth, admin, updateStudentResult);
+router.get('/reports/students', auth, admin, generateStudentReport);
+router.get('/reports/fees', auth, admin, generateFeeReport);
 
 module.exports = router;
