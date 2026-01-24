@@ -8,6 +8,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const examTimeTableRoutes = require('./routes/examTimeTableRoutes');
 const noticeRoutes = require('./routes/noticeRoutes');
 const subjectRoutes = require('./routes/subjectRoutes');
+const admitCardRoutes = require('./routes/admitCardRoutes');
+const resultRoutes = require('./routes/resultRoutes');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -44,5 +46,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/exam-timetable', examTimeTableRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/subjects', subjectRoutes);
+app.use('/api/admit-cards', admitCardRoutes);
+app.use('/api/results', resultRoutes);
 
 app.listen(process.env.PORT, () => console.log(`Server running on port localhost:${process.env.PORT}`));  

@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const auth = require("../middleware/authMiddleware");
-const { generateAdmit } = require("../controllers/admitCardController");
+const admin = require("../middleware/adminMiddleware");
+const { uploadAdmitCard, uploadAdmitCardForStudent, getMyAdmitCard } = require("../controllers/admitCardController");
 
-router.get("/download", auth, generateAdmit);
+router.post("/upload", auth, admin, uploadAdmitCard, uploadAdmitCardForStudent);
+router.get("/download", auth, getMyAdmitCard);
 
 module.exports = router;

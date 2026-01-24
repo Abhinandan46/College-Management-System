@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Layout = ({ children, userType = 'student' }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024); // lg breakpoint
   const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
 
@@ -17,12 +17,12 @@ const Layout = ({ children, userType = 'student' }) => {
 
   const adminNavItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: '📊' },
-    { name: 'Students', path: '/admin/students', icon: '👥' },
-    { name: 'Fees', path: '/admin/fees', icon: '💰' },
-    { name: 'Results', path: '/admin/results', icon: '📊' },
-    { name: 'Notices', path: '/admin/notices', icon: '📢' },
-    { name: 'Exams', path: '/admin/exams', icon: '📅' },
-    { name: 'Reports', path: '/admin/reports', icon: '📋' },
+    { name: 'Students', path: '/admin/dashboard?tab=students', icon: '👥' },
+    { name: 'Fees', path: '/admin/dashboard?tab=fees', icon: '💰' },
+    { name: 'Results', path: '/admin/dashboard?tab=results', icon: '📊' },
+    { name: 'Notices', path: '/admin/dashboard?tab=notices', icon: '📢' },
+    { name: 'Exams', path: '/admin/dashboard?tab=exams', icon: '📅' },
+    { name: 'Reports', path: '/admin/dashboard?tab=reports', icon: '📋' },
   ];
 
   const navItems = userType === 'admin' ? adminNavItems : studentNavItems;
@@ -30,9 +30,17 @@ const Layout = ({ children, userType = 'student' }) => {
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 ${darkMode ? 'dark' : ''}`}>
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0`}>
-        <div className="flex items-center justify-center h-16 px-4 bg-indigo-600 dark:bg-indigo-700">
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
+        <div className="flex items-center justify-between h-16 px-4 bg-indigo-600 dark:bg-indigo-700">
           <h1 className="text-xl font-bold text-white">CMS</h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-2 rounded-md text-white hover:bg-indigo-500 transition-colors duration-200"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
         <nav className="mt-8 px-4">
           <ul className="space-y-2">
@@ -57,13 +65,13 @@ const Layout = ({ children, userType = 'student' }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className={`${sidebarOpen ? 'lg:pl-64' : ''}`}>
         {/* Header */}
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-md text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

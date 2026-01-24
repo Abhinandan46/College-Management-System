@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Layout from '../components/Layout';
 
 export default function Profile() {
   const [student, setStudent] = useState(null);
@@ -51,125 +52,127 @@ export default function Profile() {
   };
 
   if (!student) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="loading"></div>
-    </div>
+    <Layout userType="student">
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    </Layout>
   );
 
   return (
-    <div style={{ minHeight: '100vh', padding: '2rem 0' }}>
-      <div className="container">
-        <div className="card fade-in">
-          <div className="flex-between" style={{ marginBottom: '2rem' }}>
-            <h1>👤 Student Profile</h1>
-            <button onClick={() => navigate('/dashboard')} className="btn btn-secondary">
+    <Layout userType="student">
+      <div className="p-6">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">👤 Student Profile</h1>
+            <button onClick={() => navigate('/dashboard')} className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
               Back to Dashboard
             </button>
           </div>
 
           {!isEditing ? (
-            <div className="profile-info">
-              <div className="profile-section">
-                <h3>Personal Information</h3>
-                <div className="info-grid">
-                  <div className="info-item">
-                    <label>Name:</label>
-                    <span>{student.name}</span>
+            <div>
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Name</label>
+                    <span className="text-gray-900 dark:text-white">{student.name}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Email:</label>
-                    <span>{student.email}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Email</label>
+                    <span className="text-gray-900 dark:text-white">{student.email}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Phone:</label>
-                    <span>{student.phone || 'Not provided'}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Phone</label>
+                    <span className="text-gray-900 dark:text-white">{student.phone || 'Not provided'}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Date of Birth:</label>
-                    <span>{student.dob || 'Not provided'}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Date of Birth</label>
+                    <span className="text-gray-900 dark:text-white">{student.dob || 'Not provided'}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Address:</label>
-                    <span>{student.address || 'Not provided'}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Address</label>
+                    <span className="text-gray-900 dark:text-white">{student.address || 'Not provided'}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Course:</label>
-                    <span>{student.course}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Course</label>
+                    <span className="text-gray-900 dark:text-white">{student.course}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Admission Status:</label>
-                    <span style={{
-                      color: student.admissionStatus === 'Approved' ? '#27ae60' : '#f39c12',
-                      fontWeight: '600'
-                    }}>{student.admissionStatus}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Admission Status</label>
+                    <span className={`font-semibold ${
+                      student.admissionStatus === 'Approved' ? 'text-green-600' :
+                      student.admissionStatus === 'Submitted' ? 'text-yellow-600' : 'text-red-600'
+                    }`}>{student.admissionStatus}</span>
                   </div>
-                  <div className="info-item">
-                    <label>Fee Status:</label>
-                    <span style={{
-                      color: student.feePaid ? '#27ae60' : '#e74c3c',
-                      fontWeight: '600'
-                    }}>{student.feePaid ? 'Paid' : 'Pending'}</span>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Fee Status</label>
+                    <span className={`font-semibold ${
+                      student.feePaid ? 'text-green-600' : 'text-red-600'
+                    }`}>{student.feePaid ? 'Paid' : 'Pending'}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="profile-actions" style={{ marginTop: '2rem' }}>
-                <button onClick={() => setIsEditing(true)} className="btn btn-primary">
-                  ✏️ Edit Profile
-                </button>
-                <button onClick={() => navigate('/change-password')} className="btn btn-secondary">
-                  🔐 Change Password
+              <div className="flex justify-center">
+                <button onClick={() => setIsEditing(true)} className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  Edit Profile
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleUpdateProfile} className="profile-form">
-              <h3>Edit Profile</h3>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label>Name:</label>
+            <form onSubmit={handleUpdateProfile} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Edit Profile</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name:</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name || ''}
                     onChange={handleInputChange}
                     required
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Phone:</label>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone:</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone || ''}
                     onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Date of Birth:</label>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth:</label>
                   <input
                     type="date"
                     name="dob"
                     value={formData.dob || ''}
                     onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Address:</label>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Address:</label>
                   <textarea
                     name="address"
                     value={formData.address || ''}
                     onChange={handleInputChange}
                     rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
 
-              <div className="form-actions" style={{ marginTop: '2rem' }}>
-                <button type="submit" className="btn btn-primary">
+              <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center justify-center gap-2">
                   💾 Save Changes
                 </button>
-                <button type="button" onClick={() => setIsEditing(false)} className="btn btn-secondary">
+                <button type="button" onClick={() => setIsEditing(false)} className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
                   Cancel
                 </button>
               </div>
@@ -177,6 +180,6 @@ export default function Profile() {
           )}
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

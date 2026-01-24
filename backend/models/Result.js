@@ -10,7 +10,8 @@ const resultSchema = new mongoose.Schema({
     { name: String, marks: Number }
   ],
   total: Number,
-  grade: String
+  grade: String,
+  filePath: String // Added for uploaded result files
 });
 
 module.exports = mongoose.model("Result", resultSchema);

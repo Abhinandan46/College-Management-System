@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from '../components/Layout';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'dashboard');
   const [stats, setStats] = useState({});
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -25,8 +26,17 @@ export default function AdminDashboard() {
     semester: '',
     subjects: [{ name: '', marks: '' }]
   });
+  const [uploadData, setUploadData] = useState({
+    studentId: '',
+    semester: '',
+    file: null
+  });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setActiveTab(searchParams.get('tab') || 'dashboard');
+  }, [searchParams]);
 
   useEffect(() => {
     if (activeTab === 'dashboard') {
@@ -152,6 +162,49 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUploadAdmitCard = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("studentId", uploadData.studentId);
+      formData.append("admitCard", uploadData.file);
+
+      await axios.post("http://localhost:5000/api/admit-cards/upload", formData, {
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data"
+        },
+      });
+      alert("Admit card uploaded successfully");
+      setUploadData({ studentId: '', semester: '', file: null });
+    } catch (error) {
+      alert("Failed to upload admit card");
+    }
+  };
+
+  const handleUploadResult = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("studentId", uploadData.studentId);
+      formData.append("semester", uploadData.semester);
+      formData.append("result", uploadData.file);
+
+      await axios.post("http://localhost:5000/api/results/upload", formData, {
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data"
+        },
+      });
+      alert("Result uploaded successfully");
+      setUploadData({ studentId: '', semester: '', file: null });
+    } catch (error) {
+      alert("Failed to upload result");
+    }
+  };
+
   const handleGenerateReport = async (type, format) => {
     try {
       const token = localStorage.getItem("token");
@@ -198,6 +251,7 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'students', label: 'Students', icon: '👥' },
+    { id: 'admit-cards', label: 'Admit Cards', icon: '🆔' },
     { id: 'results', label: 'Results', icon: '📝' },
     { id: 'fees', label: 'Fees', icon: '💰' },
     { id: 'reports', label: 'Reports', icon: '📋' },
@@ -469,6 +523,9 @@ export default function AdminDashboard() {
                         <tr>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Phone</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Address</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">DOB</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Course</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Admission Status</th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fee Status</th>
@@ -480,6 +537,9 @@ export default function AdminDashboard() {
                           <tr key={student._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{student.name}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.phone || 'N/A'}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.address || 'N/A'}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.dob || 'N/A'}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.course}</td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -571,13 +631,91 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* Admit Cards Tab */}
+        {activeTab === 'admit-cards' && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upload Admit Cards</h3>
+              <form onSubmit={handleUploadAdmitCard} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Student ID</label>
+                  <input
+                    type="text"
+                    value={uploadData.studentId}
+                    onChange={(e) => setUploadData({ ...uploadData, studentId: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Admit Card File</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={(e) => setUploadData({ ...uploadData, file: e.target.files[0] })}
+                    className="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Upload Admit Card
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
         {/* Other tabs with placeholder content */}
         {activeTab === 'results' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <div className="text-6xl mb-4">📝</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Results Management</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">Navigate to the Students tab to add results for individual students.</p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">Click on any student and use the "Add Result" button to upload their academic performance.</p>
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upload Results</h3>
+              <form onSubmit={handleUploadResult} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Student ID</label>
+                  <input
+                    type="text"
+                    value={uploadData.studentId}
+                    onChange={(e) => setUploadData({ ...uploadData, studentId: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
+                  <input
+                    type="number"
+                    value={uploadData.semester}
+                    onChange={(e) => setUploadData({ ...uploadData, semester: e.target.value })}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Result File</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={(e) => setUploadData({ ...uploadData, file: e.target.files[0] })}
+                    className="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Upload Result
+                </button>
+              </form>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 text-center">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Manual Result Entry</h3>
+              <p className="text-gray-600 dark:text-gray-400">Navigate to the Students tab to manually add results for individual students.</p>
+            </div>
           </div>
         )}
 
