@@ -3,6 +3,25 @@ const Student = require('../models/Student');
 const bcrypt = require('bcryptjs');
 const PDFDocument = require('pdfkit');
 
+// Generate unique student ID
+const generateStudentId = async () => {
+  const year = new Date().getFullYear();
+  const prefix = 'STU';
+  
+  // Find the last student ID for this year
+  const lastStudent = await Student.findOne({ 
+    studentId: new RegExp(`^${prefix}${year}`) 
+  }).sort({ studentId: -1 });
+  
+  let sequence = 1;
+  if (lastStudent && lastStudent.studentId) {
+    const lastSequence = parseInt(lastStudent.studentId.slice(-4));
+    sequence = lastSequence + 1;
+  }
+  
+  return `${prefix}${year}${sequence.toString().padStart(4, '0')}`;
+};
+
 exports.registerStudent = async (req, res) => {
     const { name, email, password, course } = req.body;
     try {
@@ -11,7 +30,8 @@ exports.registerStudent = async (req, res) => {
             return res.status(400).json({ message: 'Student already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newStudent = new Student({ name, email, password: hashedPassword, course });
+        const studentId = await generateStudentId();
+        const newStudent = new Student({ name, email, password: hashedPassword, course, studentId });
         await newStudent.save();
         res.status(201).json({ message: 'Student registered successfully' });
     }

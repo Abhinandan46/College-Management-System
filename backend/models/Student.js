@@ -6,6 +6,7 @@ const studentSchema = new mongoose.Schema({
   password: String,
   role: { type: String, default: 'student' },
   course: String,
+  studentId: { type: String, unique: true },
   admissionStatus: { type: String, default: "Approved" },
   feePaid: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },

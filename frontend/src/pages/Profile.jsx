@@ -76,6 +76,10 @@ export default function Profile() {
                 <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Personal Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Student ID</label>
+                    <span className="text-gray-900 dark:text-white font-mono">{student.studentId}</span>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                     <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Name</label>
                     <span className="text-gray-900 dark:text-white">{student.name}</span>
                   </div>

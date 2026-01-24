@@ -112,7 +112,7 @@ exports.addStudentResult = async (req, res) => {
     const { studentId, semester, subjects } = req.body;
 
     // Calculate total marks and grade
-    const total = subjects.reduce((sum, subject) => sum + subject.marks, 0);
+    const total = subjects.reduce((sum, subject) => sum + Number(subject.marks), 0);
     const average = total / subjects.length;
     let grade = 'F';
     if (average >= 90) grade = 'A+';
@@ -141,7 +141,7 @@ exports.updateStudentResult = async (req, res) => {
     const { id } = req.params;
     const { subjects } = req.body;
 
-    const total = subjects.reduce((sum, subject) => sum + subject.marks, 0);
+    const total = subjects.reduce((sum, subject) => sum + Number(subject.marks), 0);
     const average = total / subjects.length;
     let grade = 'F';
     if (average >= 90) grade = 'A+';
