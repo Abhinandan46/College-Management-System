@@ -33,6 +33,7 @@
 - [👤 Default Admin Credentials](#-default-admin-credentials)
 - [📁 Project Structure](#-project-structure)
 - [🎨 Features Overview](#-features-overview)
+- [📚 API Documentation](#-api-documentation)
 - [🤝 Contributing](#-contributing)
 - [📝 License](#-license)
 - [📞 Support](#-support)
@@ -53,7 +54,6 @@
 | 🎯 **Improved Results Display** | Better calculation of marks, grades, and performance metrics | ✅ Complete |
 
 </div>
-
 
 ---
 
@@ -122,11 +122,9 @@
 
 </div>
 
-## � Installation & Setup
+## 📋 Prerequisites
 
 <div align="center">
-
-### 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -136,12 +134,14 @@ Before you begin, ensure you have the following installed:
 
 </div>
 
+## 🔧 Installation & Setup
+
 ### 🚀 Quick Start
 
 #### 1. 📥 Clone the Repository
 ```bash
-git clone https://github.com/your-username/college-management-system.git
-cd college-management-system
+git clone https://github.com/Abhinandan46/College-Management-System.git
+cd College-Management-System
 ```
 
 #### 2. 🖥️ Backend Setup
@@ -155,6 +155,7 @@ Create a `.env` file in the backend directory:
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/college-management
 JWT_SECRET=your-super-secret-jwt-key-here
+NODE_ENV=development
 ```
 
 Start the backend server:
@@ -167,6 +168,15 @@ npm start
 ```bash
 cd ../frontend
 npm install
+```
+
+Create a `.env` file in the frontend directory (optional):
+```env
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+Start the frontend application:
+```bash
 npm start
 ```
 > 🌐 **Application will open at:** `http://localhost:3000`
@@ -194,85 +204,411 @@ npm start
 
 <div align="center">
 
-```
-college-management-system/
-├── backend/
-│ ├── controllers/
-│ │ ├── adminController.js
-│ │ ├── admitCardController.js
-│ │ ├── examTimeTableController.js
-│ │ ├── feeController.js
-│ │ ├── feesController.js
-│ │ ├── noticeController.js
-│ │ ├── resultController.js
-│ │ ├── studentController.js
-│ │ └── subjectController.js
-│ │
-│ ├── middleware/
-│ │ ├── adminMiddleware.js
-│ │ └── authMiddleware.js
-│ │
-│ ├── models/
-│ │ ├── ExamTimeTable.js
-│ │ ├── Fees.js
-│ │ ├── Notice.js
-│ │ ├── Result.js
-│ │ ├── Student.js
-│ │ └── Subject.js
-│ │
-│ ├── routes/
-│ │ ├── adminRoutes.js
-│ │ ├── admitCardRoutes.js
-│ │ ├── examTimeTableRoutes.js
-│ │ ├── feeRoutes.js
-│ │ ├── feesRoutes.js
-│ │ ├── noticeRoutes.js
-│ │ ├── resultRoutes.js
-│ │ └── studentRoutes.js
-│ │
-│ ├── server.js
-│ ├── seedData.js
-│ └── package.json
-│
-├── frontend/
-│ ├── public/
-│ └── src/
-│ ├── components/
-│ ├── pages/
-│ │ ├── Login.jsx
-│ ├── App.css
-│ ├── App.js
-│ └── index.js
-│
-└── README.md
-```
+### 🗂️ Comprehensive Directory Layout
 
 </div>
 
-## �‍💼 Admin Panel Features
+```
+college-management-system/
+│
+├── 📂 backend/                          # Backend server application
+│   ├── 📂 config/                       # Configuration files
+│   │   ├── db.js                        # Database connection configuration
+│   │   └── env.js                       # Environment variables handler
+│   │
+│   ├── 📂 controllers/                  # Request handlers & business logic
+│   │   ├── adminController.js           # Admin operations (dashboard, reports, CRUD)
+│   │   ├── admitCardController.js       # Admit card generation & management
+│   │   ├── authController.js            # Authentication & authorization logic
+│   │   ├── examTimeTableController.js   # Exam schedule management
+│   │   ├── feeController.js             # Fee payment tracking
+│   │   ├── feesController.js            # Fee structure & management
+│   │   ├── noticeController.js          # Notice board operations
+│   │   ├── resultController.js          # Result management & PDF generation
+│   │   ├── studentController.js         # Student profile & operations
+│   │   └── subjectController.js         # Subject/course management
+│   │
+│   ├── 📂 middleware/                   # Express middleware functions
+│   │   ├── adminMiddleware.js           # Admin role verification
+│   │   ├── authMiddleware.js            # JWT token verification
+│   │   ├── errorHandler.js              # Global error handling
+│   │   └── validation.js                # Request data validation
+│   │
+│   ├── 📂 models/                       # MongoDB schemas & models
+│   │   ├── Admin.js                     # Admin user schema
+│   │   ├── ExamTimeTable.js             # Exam schedule schema
+│   │   ├── Fees.js                      # Fee structure schema
+│   │   ├── Notice.js                    # Notice schema
+│   │   ├── Result.js                    # Student result schema
+│   │   ├── Student.js                   # Student profile schema
+│   │   └── Subject.js                   # Subject/course schema
+│   │
+│   ├── 📂 routes/                       # API route definitions
+│   │   ├── adminRoutes.js               # /api/admin/* routes
+│   │   ├── admitCardRoutes.js           # /api/admit-card/* routes
+│   │   ├── authRoutes.js                # /api/auth/* routes
+│   │   ├── examTimeTableRoutes.js       # /api/exam-timetable/* routes
+│   │   ├── feeRoutes.js                 # /api/fees/* routes
+│   │   ├── noticeRoutes.js              # /api/notices/* routes
+│   │   ├── resultRoutes.js              # /api/results/* routes
+│   │   ├── studentRoutes.js             # /api/students/* routes
+│   │   └── subjectRoutes.js             # /api/subjects/* routes
+│   │
+│   ├── 📂 utils/                        # Utility functions & helpers
+│   │   ├── pdfGenerator.js              # PDF document generation
+│   │   ├── excelGenerator.js            # Excel report generation
+│   │   ├── idGenerator.js               # Student ID generation (STU-YYYY-NNNN)
+│   │   ├── emailService.js              # Email notification service
+│   │   └── dateFormatter.js             # Date formatting utilities
+│   │
+│   ├── 📂 uploads/                      # File upload directory
+│   │   ├── documents/                   # Student documents
+│   │   ├── photos/                      # Student photos
+│   │   └── certificates/                # Generated certificates
+│   │
+│   ├── .env                             # Environment variables (not in git)
+│   ├── .env.example                     # Environment variables template
+│   ├── .gitignore                       # Git ignore rules
+│   ├── package.json                     # Dependencies & scripts
+│   ├── seedData.js                      # Database seeding script
+│   └── server.js                        # Main application entry point
+│
+├── 📂 frontend/                         # React frontend application
+│   ├── 📂 public/                       # Static public assets
+│   │   ├── favicon.ico                  # Application favicon
+│   │   ├── index.html                   # HTML template
+│   │   ├── logo192.png                  # Logo (192x192)
+│   │   ├── logo512.png                  # Logo (512x512)
+│   │   ├── manifest.json                # PWA manifest
+│   │   └── robots.txt                   # Search engine instructions
+│   │
+│   └── 📂 src/                          # Source code
+│       ├── 📂 assets/                   # Static assets
+│       │   ├── images/                  # Image files
+│       │   ├── icons/                   # Icon files
+│       │   └── styles/                  # Global styles
+│       │
+│       ├── 📂 components/               # Reusable React components
+│       │   ├── 📂 common/               # Shared components
+│       │   │   ├── Button.jsx           # Custom button component
+│       │   │   ├── Card.jsx             # Card container component
+│       │   │   ├── Input.jsx            # Custom input component
+│       │   │   ├── Modal.jsx            # Modal dialog component
+│       │   │   ├── Navbar.jsx           # Navigation bar
+│       │   │   ├── Sidebar.jsx          # Sidebar navigation
+│       │   │   ├── Table.jsx            # Data table component
+│       │   │   ├── Loader.jsx           # Loading spinner
+│       │   │   ├── Alert.jsx            # Alert/notification component
+│       │   │   └── Footer.jsx           # Footer component
+│       │   │
+│       │   ├── 📂 admin/                # Admin-specific components
+│       │   │   ├── AdminDashboard.jsx   # Admin dashboard overview
+│       │   │   ├── StudentList.jsx      # Student management list
+│       │   │   ├── StudentForm.jsx      # Add/edit student form
+│       │   │   ├── ResultManager.jsx    # Result management interface
+│       │   │   ├── FeeTracker.jsx       # Fee tracking component
+│       │   │   ├── NoticeManager.jsx    # Notice management
+│       │   │   ├── AdmissionApproval.jsx # Admission approval interface
+│       │   │   └── ReportGenerator.jsx  # Report generation tool
+│       │   │
+│       │   ├── 📂 student/              # Student-specific components
+│       │   │   ├── StudentDashboard.jsx # Student dashboard
+│       │   │   ├── Profile.jsx          # Student profile view/edit
+│       │   │   ├── Results.jsx          # Results display
+│       │   │   ├── AdmitCard.jsx        # Admit card download
+│       │   │   ├── FeeStatus.jsx        # Fee payment status
+│       │   │   ├── ExamSchedule.jsx     # Exam timetable view
+│       │   │   ├── Notices.jsx          # Notice board
+│       │   │   └── Subjects.jsx         # Subject information
+│       │   │
+│       │   └── 📂 auth/                 # Authentication components
+│       │       ├── Login.jsx            # Login form
+│       │       ├── Register.jsx         # Registration form
+│       │       ├── ForgotPassword.jsx   # Password reset request
+│       │       └── ResetPassword.jsx    # Password reset form
+│       │
+│       ├── 📂 pages/                    # Page-level components
+│       │   ├── Home.jsx                 # Landing page
+│       │   ├── About.jsx                # About page
+│       │   ├── Contact.jsx              # Contact page
+│       │   ├── NotFound.jsx             # 404 error page
+│       │   ├── Unauthorized.jsx         # 403 unauthorized page
+│       │   └── ServerError.jsx          # 500 server error page
+│       │
+│       ├── 📂 context/                  # React Context API
+│       │   ├── AuthContext.jsx          # Authentication context
+│       │   ├── ThemeContext.jsx         # Theme (light/dark mode)
+│       │   └── NotificationContext.jsx  # Notifications context
+│       │
+│       ├── 📂 hooks/                    # Custom React hooks
+│       │   ├── useAuth.js               # Authentication hook
+│       │   ├── useApi.js                # API call hook
+│       │   ├── useDebounce.js           # Debounce hook
+│       │   ├── useLocalStorage.js       # Local storage hook
+│       │   └── usePagination.js         # Pagination hook
+│       │
+│       ├── 📂 services/                 # API service layer
+│       │   ├── api.js                   # Axios instance configuration
+│       │   ├── authService.js           # Authentication API calls
+│       │   ├── studentService.js        # Student API calls
+│       │   ├── adminService.js          # Admin API calls
+│       │   ├── resultService.js         # Result API calls
+│       │   ├── feeService.js            # Fee API calls
+│       │   └── noticeService.js         # Notice API calls
+│       │
+│       ├── 📂 utils/                    # Utility functions
+│       │   ├── constants.js             # Application constants
+│       │   ├── helpers.js               # Helper functions
+│       │   ├── validators.js            # Form validation functions
+│       │   ├── formatters.js            # Data formatting functions
+│       │   └── downloadUtils.js         # File download utilities
+│       │
+│       ├── 📂 routes/                   # Route configuration
+│       │   ├── AppRoutes.jsx            # Main route configuration
+│       │   ├── PrivateRoute.jsx         # Protected route wrapper
+│       │   └── AdminRoute.jsx           # Admin-only route wrapper
+│       │
+│       ├── App.js                       # Main App component
+│       ├── App.css                      # Global application styles
+│       ├── index.js                     # Application entry point
+│       ├── index.css                    # Root styles & Tailwind imports
+│       ├── .env                         # Environment variables (not in git)
+│       ├── .env.example                 # Environment variables template
+│       ├── .gitignore                   # Git ignore rules
+│       ├── package.json                 # Dependencies & scripts
+│       ├── tailwind.config.js           # Tailwind CSS configuration
+│       └── postcss.config.js            # PostCSS configuration
+│
+├── 📂 docs/                             # Project documentation
+│   ├── API.md                           # API documentation
+│   ├── SETUP.md                         # Setup instructions
+│   ├── DEPLOYMENT.md                    # Deployment guide
+│   └── CONTRIBUTING.md                  # Contribution guidelines
+│
+├── .gitignore                           # Root git ignore
+├── README.md                            # Project documentation
+├── LICENSE                              # MIT License
+└── package.json                         # Root package.json (if using monorepo)
+```
+
+<div align="center">
+
+### 📊 Architecture Overview
+
+</div>
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         FRONTEND                             │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐ │
+│  │   React UI  │→ │ React Router │→ │  Axios Services   │ │
+│  │  Components │  │   (Routing)  │  │  (API Calls)      │ │
+│  └─────────────┘  └──────────────┘  └───────────────────┘ │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ HTTP/REST API
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│                         BACKEND                              │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐ │
+│  │   Routes    │→ │  Middleware  │→ │   Controllers     │ │
+│  │ (Endpoints) │  │(Auth/Admin)  │  │ (Business Logic)  │ │
+│  └─────────────┘  └──────────────┘  └───────────────────┘ │
+│                                              ↓               │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                 Models (Mongoose)                     │  │
+│  └──────────────────────────────────────────────────────┘  │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ MongoDB Driver
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│                     DATABASE (MongoDB)                       │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌��───────┐ ┌─────────┐ │
+│  │Students│ │Results │ │  Fees  │ │Notices │ │Subjects │ │
+│  └────────┘ └────────┘ └────────┘ └────────┘ └─────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🔄 Data Flow
+
+```
+User Action → React Component → Service Layer → API Call
+                                                    ↓
+Response ← Component Update ← Service ← Controller → Model → Database
+```
+
+## 🎨 Features Overview
+
+### Authentication System
+- **JWT-based Authentication**: Secure token-based authentication
+- **Role-based Access Control**: Separate access for Students and Admins
+- **Password Security**: bcrypt hashing for password protection
+- **Auto Admin Creation**: Automatic admin account generation on first run
+- **Session Management**: Persistent login with token refresh
+
+### Student ID System
+- **Automatic Generation**: Unique IDs in format `STU-YYYY-NNNN`
+- **Profile Display**: IDs visible throughout the system
+- **Database Integration**: Persistent storage in MongoDB
+- **Sequential Numbering**: Auto-increment based on year
+
+### Enhanced Results System
+- **PDF Downloads**: Professional result documents
+- **Admin Management**: Full CRUD operations for results
+- **Grade Calculation**: Automatic grade assignment (A+, A, B+, etc.)
+- **Subject-wise Tracking**: Detailed marks for each subject
+- **Percentage Calculation**: Automated percentage computation
+- **Pass/Fail Status**: Automatic status determination
+
+### Modern UI/UX
+- **Tailwind CSS Framework**: Utility-first CSS for rapid development
+- **Responsive Design**: Mobile-first adaptive layouts
+- **Gradient Backgrounds**: Modern purple/pink gradient themes
+- **Icon Integration**: Lucide React icons for visual appeal
+- **Smooth Animations**: CSS transitions and hover effects
+- **Glass-morphism Effects**: Modern translucent design elements
+- **Dark Mode Ready**: Built with dark mode compatibility
+- **Intuitive Navigation**: Clean, user-friendly interface
+
+### Data Management
+- **MongoDB**: Flexible NoSQL data storage
+- **Mongoose Schemas**: Data validation and structure
+- **RESTful API**: Standard API design patterns
+- **Error Handling**: Comprehensive error management
+- **Data Validation**: Input validation at multiple layers
+
+### Document Generation
+- **PDF Reports**: Professional PDF generation with PDFKit
+- **Excel Exports**: Data export to Excel format
+- **Admit Cards**: Printable exam admit cards
+- **Certificates**: Enrollment and completion certificates
+- **Custom Templates**: Branded document templates
+
+## 📚 API Documentation
+
+### Base URL
+```
+http://localhost:5000/api
+```
+
+### Authentication
+All protected routes require a JWT token in the Authorization header:
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+### Student Routes
+
+#### Authentication
+```http
+POST /api/students/register
+POST /api/students/login
+PUT /api/students/change-password
+```
+
+#### Profile Management
+```http
+GET /api/students/profile
+PUT /api/students/update-profile
+```
+
+#### Academic Records
+```http
+POST /api/students/admission
+GET /api/students/results
+GET /api/students/results/download
+GET /api/students/admit-card
+GET /api/students/certificate
+```
+
+### Admin Routes (Protected)
+
+#### Dashboard & Analytics
+```http
+GET /api/admin/dashboard-stats
+```
+
+#### Student Management
+```http
+GET /api/admin/students
+PUT /api/admin/students/:id
+DELETE /api/admin/students/:id
+POST /api/students/register-admin
+```
+
+#### Results Management
+```http
+GET /api/admin/results
+POST /api/admin/results
+PUT /api/admin/results/:id
+DELETE /api/admin/results/:id
+```
+
+#### Report Generation
+```http
+GET /api/admin/reports/students?format=pdf|excel
+GET /api/admin/reports/fees?format=pdf|excel
+```
+
+### Exam Time Table Routes
+```http
+GET /api/exam-timetable
+POST /api/exam-timetable (admin)
+PUT /api/exam-timetable/:id (admin)
+DELETE /api/exam-timetable/:id (admin)
+```
+
+### Notices Routes
+```http
+GET /api/notices
+POST /api/notices (admin)
+PUT /api/notices/:id (admin)
+DELETE /api/notices/:id (admin)
+```
+
+### Subjects Routes
+```http
+GET /api/subjects
+POST /api/subjects (admin)
+PUT /api/subjects/:id (admin)
+DELETE /api/subjects/:id (admin)
+```
+
+### Fee Management Routes
+```http
+GET /api/fees
+POST /api/fees (admin)
+PUT /api/fees/:id (admin)
+GET /api/fees/student/:studentId
+```
+
+## 👨‍💼 Admin Panel Features
 
 ### 📊 Dashboard Overview
 - **Real-time Statistics**: Total students, approved/rejected/pending admissions
 - **Fee Management Overview**: Paid vs pending fees tracking
 - **System Metrics**: Results count, active notices, exam schedules
 - **Quick Actions**: Direct access to key management functions
+- **Visual Charts**: Graphical representation of data
 
 ### 👨‍🎓 Student Management
 - **Comprehensive CRUD Operations**: Add, view, update, and delete student records
 - **Advanced Search & Filter**: Search by name/email, filter by course, admission status, fee status
 - **Pagination**: Efficient handling of large student databases
 - **Bulk Operations**: Approve/reject multiple admissions, update fee statuses
+- **Export Options**: Download student data in PDF or Excel format
 
 ### ✅ Admission Management
 - **Status Control**: Approve, reject, or mark admissions as submitted
 - **Bulk Processing**: Handle multiple admission requests efficiently
 - **Status Tracking**: Real-time updates on admission processing
+- **Application Review**: View complete admission applications
 
 ### 💳 Fee Management
 - **Payment Tracking**: Mark fees as paid or pending
 - **Financial Overview**: Dashboard statistics for fee collection
 - **Payment History**: Track payment dates and amounts
 - **Outstanding Balance Monitoring**: Identify students with pending payments
+- **Fee Structure Management**: Configure fee amounts and categories
 
 ### 📝 Results Management
 - **Result Upload**: Add semester-wise results for students
@@ -281,26 +617,31 @@ college-management-system/
 - **Result Updates**: Modify existing results when needed
 - **Result Deletion**: Remove incorrect or outdated results
 - **PDF Generation**: Generate downloadable result PDFs for students
+- **Bulk Upload**: Import results from Excel sheets
 
 ### 🗂️ Admit Card Generation
 - **Bulk Generation**: Generate admit cards for multiple students
 - **PDF Export**: Professional admit card format
 - **Exam Details**: Include date, time, venue, and exam information
+- **Custom Templates**: Branded institutional templates
 
 ### 📣 Notice Management
 - **Create Announcements**: Post important notices with priority levels
 - **Categorization**: General, exam, fee, and admission-related notices
 - **Expiration Management**: Set notice expiry dates
 - **Priority System**: High, medium, low priority notifications
+- **Rich Text Editor**: Format notices with rich text
 
 ### 📅 Exam Management
-- **Schedule Creation**: Set up exam time tables by course and semester
+- **Schedule Creation**: Set up exam timetables by course and semester
 - **Subject Scheduling**: Assign dates, times, and venues for each subject
 - **Calendar View**: Organized display of examination schedules
+- **Conflict Detection**: Identify scheduling conflicts
 
 ### 📄 Report Generation
 - **Students Report**: Comprehensive student data export
 - **Fees Report**: Detailed fee payment and outstanding balance reports
+- **Results Report**: Academic performance reports
 - **Multiple Formats**: PDF and Excel export options
 - **Customizable Reports**: Filter and export specific data sets
 
@@ -308,87 +649,7 @@ college-management-system/
 - **Multi-criteria Search**: Search across multiple fields simultaneously
 - **Dynamic Filters**: Real-time filtering by course, status, fees, etc.
 - **Export Filtered Data**: Generate reports from filtered results
-
-### Student Routes
-- `POST /api/students/register` - Register new student
-- `POST /api/students/login` - Student login
-- `GET /api/students/profile` - Get student profile
-- `PUT /api/students/update-profile` - Update student profile
-- `PUT /api/students/change-password` - Change student password
-- `POST /api/students/register-admin` - Register new admin (admin only)
-- `POST /api/students/admission` - Submit admission form
-- `GET /api/students/results` - Get student results
-- `GET /api/students/results/download` - Download results PDF
-- `GET /api/students/admit-card` - Download admit card PDF
-- `GET /api/students/certificate` - Download enrollment certificate PDF
-
-### Admin Routes (Protected)
-- `GET /api/admin/dashboard-stats` - Get dashboard statistics
-- `GET /api/admin/students` - Get all students (with search/filter/pagination)
-- `PUT /api/admin/students/:id` - Update student status
-- `DELETE /api/admin/students/:id` - Delete student
-- `GET /api/admin/results` - Get all student results
-- `POST /api/admin/results` - Add student result
-- `PUT /api/admin/results/:id` - Update student result
-- `DELETE /api/admin/results/:id` - Delete student result
-- `GET /api/admin/reports/students` - Generate students report (PDF/Excel)
-- `GET /api/admin/reports/fees` - Generate fees report (PDF/Excel)
-
-### Exam Time Table Routes
-- `GET /api/exam-timetable` - Get exam time tables
-- `POST /api/exam-timetable` - Create exam time table (admin)
-- `PUT /api/exam-timetable/:id` - Update exam time table (admin)
-- `DELETE /api/exam-timetable/:id` - Delete exam time table (admin)
-
-### Notices Routes
-- `GET /api/notices` - Get all notices
-- `POST /api/notices` - Create notice (admin)
-- `PUT /api/notices/:id` - Update notice (admin)
-- `DELETE /api/notices/:id` - Delete notice (admin)
-
-### Subjects Routes
-- `GET /api/subjects` - Get all subjects
-- `POST /api/subjects` - Create subject (admin)
-- `PUT /api/subjects/:id` - Update subject (admin)
-- `DELETE /api/subjects/:id` - Delete subject (admin)
-
-### Document Routes
-- `GET /api/students/admit-card` - Download admit card PDF
-
-## 🎨 Features Overview
-
-### Authentication System
-- JWT-based authentication
-- Role-based access control (Student/Admin)
-- Secure password hashing
-- Automatic admin creation on first run
-
-### Student ID System
-- **Automatic Generation**: Unique student IDs in format STU-YYYY-NNNN
-- **Profile Display**: Student IDs visible in profile and throughout the system
-- **Database Integration**: IDs stored and managed in MongoDB
-
-### Enhanced Results System
-- **PDF Downloads**: Students can download their results as PDF documents
-- **Admin Management**: Administrators can view, add, update, and delete results
-- **Grade Calculation**: Automatic grade assignment based on percentage
-- **Subject-wise Tracking**: Detailed marks for each subject
-
-### Modern UI/UX
-- **Tailwind CSS Framework** - Utility-first CSS framework for rapid UI development
-- **Responsive Design** - Mobile-first approach with adaptive layouts
-- **Gradient Backgrounds** - Modern gradient designs with purple/pink themes
-- **Icon Integration** - Lucide React icons for enhanced visual appeal
-- **Smooth Animations** - CSS transitions and hover effects
-- **Glass-morphism Effects** - Modern translucent design elements
-- **Dark Mode Ready** - Built with dark mode compatibility in mind
-- **Intuitive Navigation** - Clean, user-friendly interface design
-
-### Data Management
-- MongoDB for flexible data storage
-- Mongoose schemas for data validation
-- RESTful API design
-- Error handling and validation
+- **Save Search Preferences**: Persistent search and filter settings
 
 ## 🤝 Contributing
 
@@ -398,14 +659,14 @@ college-management-system/
 
 We welcome contributions from the community! Here's how you can help:
 
-1. **🐛 Report Bugs** - Found a bug? [Open an issue](https://github.com/your-username/college-management-system/issues)
-2. **💡 Suggest Features** - Have an idea? [Share it with us](https://github.com/your-username/college-management-system/issues)
+1. **🐛 Report Bugs** - Found a bug? [Open an issue](https://github.com/Abhinandan46/College-Management-System/issues)
+2. **💡 Suggest Features** - Have an idea? [Share it with us](https://github.com/Abhinandan46/College-Management-System/issues)
 3. **🔧 Submit Pull Requests** - Ready to code? Follow these steps:
 
 ```bash
 # Fork the repository
-git clone https://github.com/your-username/college-management-system.git
-cd college-management-system
+git clone https://github.com/Abhinandan46/College-Management-System.git
+cd College-Management-System
 
 # Create a feature branch
 git checkout -b feature/AmazingFeature
@@ -421,11 +682,13 @@ git push origin feature/AmazingFeature
 
 ### 📋 Contribution Guidelines
 
-- Follow the existing code style
+- Follow the existing code style and conventions
 - Write clear, concise commit messages
 - Update documentation as needed
 - Test your changes thoroughly
-- Ensure all tests pass
+- Ensure all tests pass before submitting PR
+- Add comments for complex logic
+- Follow React and Node.js best practices
 
 </div>
 
@@ -440,9 +703,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### 💬 Get in Touch
 
 - 📧 **Email:** abhinandansahore46@gmail.com
-- 🐛 **Issues:** [GitHub Issues](https://github.com/your-username/college-management-system/issues)
-- 📖 **Documentation:** [Wiki](https://github.com/your-username/college-management-system/wiki)
-- 💬 **Discussions:** [GitHub Discussions](https://github.com/your-username/college-management-system/discussions)
+- 🐛 **Issues:** [GitHub Issues](https://github.com/Abhinandan46/College-Management-System/issues)
+- 📖 **Documentation:** [Wiki](https://github.com/Abhinandan46/College-Management-System/wiki)
+- 💬 **Discussions:** [GitHub Discussions](https://github.com/Abhinandan46/College-Management-System/discussions)
 
 ---
 
@@ -450,8 +713,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you find this project helpful, please give it a ⭐️ on GitHub!
 
-[![GitHub stars](https://img.shields.io/github/stars/your-username/college-management-system.svg?style=social&label=Star)](https://github.com/your-username/college-management-system)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/college-management-system.svg?style=social&label=Fork)](https://github.com/your-username/college-management-system/fork)
+[![GitHub stars](https://img.shields.io/github/stars/Abhinandan46/College-Management-System.svg?style=social&label=Star)](https://github.com/Abhinandan46/College-Management-System)
+[![GitHub forks](https://img.shields.io/github/forks/Abhinandan46/College-Management-System.svg?style=social&label=Fork)](https://github.com/Abhinandan46/College-Management-System/fork)
 
 </div>
 
@@ -470,6 +733,8 @@ Built with ❤️ using modern web technologies and inspired by real-world colle
 - 🎨 Tailwind CSS for beautiful styling
 - 🔐 JWT for secure authentication
 - 📄 PDFKit for document generation
+- 📊 ExcelJS for report generation
+- 🎭 Lucide React for icons
 
 **Contributors:**
 - 👨‍💻 **Abhinandan Sahore** - Project Creator & Lead Developer
@@ -482,9 +747,9 @@ Built with ❤️ using modern web technologies and inspired by real-world colle
 
 ---
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/your-username/college-management-system)
-[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://github.com/your-username/college-management-system)
-[![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/your-username/college-management-system)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/Abhinandan46/College-Management-System)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://github.com/Abhinandan46/College-Management-System)
+[![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/Abhinandan46/College-Management-System)
 
 </div>
 
