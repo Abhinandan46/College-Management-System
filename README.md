@@ -196,65 +196,55 @@ npm start
 
 ```
 college-management-system/
-├── 📁 backend/
-│   ├── 📁 controllers/          # Business logic controllers
-│   │   ├── adminController.js
-│   │   ├── admitCardController.js
-│   │   ├── examTimeTableController.js
-│   │   ├── feeController.js
-│   │   ├── feesController.js
-│   │   ├── noticeController.js
-│   │   ├── resultController.js
-│   │   ├── studentController.js
-│   │   └── subjectController.js
-│   ├── 📁 middleware/           # Authentication & authorization
-│   │   ├── adminMiddleware.js
-│   │   └── authMiddleware.js
-│   ├── 📁 models/              # Database schemas
-│   │   ├── ExamTimeTable.js
-│   │   ├── Fees.js
-│   │   ├── Notice.js
-│   │   ├── Result.js
-│   │   ├── Student.js
-│   │   └── Subject.js
-│   ├── 📁 routes/              # API route definitions
-│   │   ├── adminRoutes.js
-│   │   ├── admitCardRoutes.js
-│   │   ├── examTimeTableRoutes.js
-│   │   ├── feeRoutes.js
-│   │   ├── feesRoutes.js
-│   │   ├── noticeRoutes.js
-│   │   ├── resultRoutes.js
-│   │   └── studentRoutes.js
-│   ├── 🗂️ server.js            # Main server file
-│   ├── 🌱 seedData.js          # Database seeding
-│   └── 📦 package.json
-├── 📁 frontend/
-│   ├── 📁 public/              # Static assets
-│   ├── 📁 src/
-│   │   ├── 📁 components/      # Reusable React components
-│   │   ├── 📁 pages/           # Page components
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── AdminDashboard.jsx
-│   │   │   ├── AdmissionForm.jsx
-│   │   │   ├── AdmitCard.jsx
-│   │   │   ├── Certificates.jsx
-│   │   │   ├── ChangePassword.jsx
-│   │   │   ├── ExamTimeTable.jsx
-│   │   │   ├── Fees.jsx
-│   │   │   ├── Notices.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── Results.jsx
-│   │   │   └── Subjects.jsx
-│   │   ├── 🎨 App.css           # Global styles
-│   │   ├── ⚛️ App.js            # Main React app
-│   │   ├── 🏠 index.js          # React entry point
-│   │   └── 📊 reportWebVitals.js
-│   └── 📦 package.json
-├── 📄 README.md                 # Project documentation
-└── ⚙️ Other config files
+├── backend/
+│ ├── controllers/
+│ │ ├── adminController.js
+│ │ ├── admitCardController.js
+│ │ ├── examTimeTableController.js
+│ │ ├── feeController.js
+│ │ ├── feesController.js
+│ │ ├── noticeController.js
+│ │ ├── resultController.js
+│ │ ├── studentController.js
+│ │ └── subjectController.js
+│ │
+│ ├── middleware/
+│ │ ├── adminMiddleware.js
+│ │ └── authMiddleware.js
+│ │
+│ ├── models/
+│ │ ├── ExamTimeTable.js
+│ │ ├── Fees.js
+│ │ ├── Notice.js
+│ │ ├── Result.js
+│ │ ├── Student.js
+│ │ └── Subject.js
+│ │
+│ ├── routes/
+│ │ ├── adminRoutes.js
+│ │ ├── admitCardRoutes.js
+│ │ ├── examTimeTableRoutes.js
+│ │ ├── feeRoutes.js
+│ │ ├── feesRoutes.js
+│ │ ├── noticeRoutes.js
+│ │ ├── resultRoutes.js
+│ │ └── studentRoutes.js
+│ │
+│ ├── server.js
+│ ├── seedData.js
+│ └── package.json
+│
+├── frontend/
+│ ├── public/
+│ └── src/
+│ ├── components/
+│ ├── pages/
+│ │ ├── Login.jsx
+│ ├── App.css
+│ ├── App.js
+│ └── index.js
+│
+└── README.md
 ```
 
 </div>
