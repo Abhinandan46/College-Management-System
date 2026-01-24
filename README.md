@@ -64,7 +64,8 @@
 
 | Login Page | Dashboard | Admin Panel |
 |------------|-----------|-------------|
-| ![Login](https://via.placeholder.com/300x200/6366f1/ffffff?text=Login+Page) | ![Dashboard](https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Dashboard) | ![Admin](https://via.placeholder.com/300x200/06b6d4/ffffff?text=Admin+Panel) |
+| ![Login](<img width="1920" height="1020" alt="Screenshot 2026-01-24 213218" src="https://github.com/user-attachments/assets/24f70814-bff9-4ad1-8652-7e4b085bebfe" />
+) | ![Dashboard](https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Dashboard) | ![Admin](https://via.placeholder.com/300x200/06b6d4/ffffff?text=Admin+Panel) |
 
 *🚀 **Live Demo:** [View Application](https://your-demo-url.com)*
 
