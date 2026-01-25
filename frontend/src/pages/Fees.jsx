@@ -18,7 +18,7 @@ export default function Fees() {
         return;
       }
       
-      const res = await axios.get("http://localhost:5000/api/fees/status", {
+      const res = await axios.get("https://college-management-system-nnkd.onrender.com/api/fees/status", {
         headers: { Authorization: token }
       });
       setFees(Array.isArray(res.data) ? res.data : []);
@@ -32,7 +32,7 @@ export default function Fees() {
 
   const payFees = async (feeId) => {
     try {
-      await axios.post("http://localhost:5000/api/fees/pay", { feeId }, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/fees/pay", { feeId }, {
         headers: { Authorization: localStorage.getItem("token") }
       });
       alert("Fees Paid Successfully");

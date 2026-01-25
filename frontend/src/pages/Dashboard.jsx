@@ -16,7 +16,7 @@ export default function Dashboard() {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/students/profile", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/profile", {
           headers: { Authorization: token }
         });
         setStudent(response.data);

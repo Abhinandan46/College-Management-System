@@ -31,7 +31,7 @@ export default function ChangePassword() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:5000/api/students/change-password", {
+      await axios.put("https://college-management-system-nnkd.onrender.com/api/students/change-password", {
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword
       }, {

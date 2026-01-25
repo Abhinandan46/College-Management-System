@@ -16,7 +16,7 @@ export default function Certificates() {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/students/profile", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/profile", {
           headers: { Authorization: token }
         });
         setStudent(response.data);
@@ -37,7 +37,7 @@ export default function Certificates() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/students/certificate", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/certificate", {
         headers: { Authorization: token },
         responseType: 'blob'
       });

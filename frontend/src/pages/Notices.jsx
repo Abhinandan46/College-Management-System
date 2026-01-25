@@ -16,7 +16,7 @@ export default function Notices() {
 
     const fetchNotices = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/notices", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/notices", {
           headers: { Authorization: token }
         });
         setNotices(response.data);

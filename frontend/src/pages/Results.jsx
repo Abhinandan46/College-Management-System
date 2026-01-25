@@ -13,7 +13,7 @@ export default function Results() {
 
   const fetchResults = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/results/my", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/results/my", {
         headers: { Authorization: localStorage.getItem("token") }
       });
       setResults(Array.isArray(response.data) ? response.data : [response.data]);
@@ -24,7 +24,7 @@ export default function Results() {
 
   const downloadResult = async (resultId, semester) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/results/download/${resultId}`, {
+      const response = await axios.get(`https://college-management-system-nnkd.onrender.com/api/results/download/${resultId}`, {
         headers: { Authorization: localStorage.getItem("token") },
         responseType: 'blob'
       });
@@ -43,7 +43,7 @@ export default function Results() {
 
   const downloadResultPDF = async (resultId, semester) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/results/pdf/${resultId}`, {
+      const response = await axios.get(`https://college-management-system-nnkd.onrender.com/api/results/pdf/${resultId}`, {
         headers: { Authorization: localStorage.getItem("token") },
         responseType: 'blob'
       });

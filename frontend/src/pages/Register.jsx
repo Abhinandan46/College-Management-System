@@ -14,7 +14,7 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/students/register", {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/students/register", {
         name,
         email,
         password,

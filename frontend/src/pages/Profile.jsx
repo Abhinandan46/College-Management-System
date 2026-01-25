@@ -18,7 +18,7 @@ export default function Profile() {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/students/profile", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/profile", {
           headers: { Authorization: token }
         });
         setStudent(response.data);
@@ -40,7 +40,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put("http://localhost:5000/api/students/update-profile", formData, {
+      const response = await axios.put("https://college-management-system-nnkd.onrender.com/api/students/update-profile", formData, {
         headers: { Authorization: token }
       });
       setStudent(response.data.student);

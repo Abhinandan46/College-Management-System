@@ -90,7 +90,7 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/admin/dashboard-stats", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/admin/dashboard-stats", {
         headers: { Authorization: token },
       });
       setStats(response.data);
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
         ...(feeFilter && { feePaid: feeFilter })
       });
 
-      const response = await axios.get(`http://localhost:5000/api/admin/students?${params}`, {
+      const response = await axios.get(`https://college-management-system-nnkd.onrender.com/api/admin/students?${params}`, {
         headers: { Authorization: token },
       });
       setStudents(response.data.students);
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
   const fetchResults = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/results/all", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/results/all", {
         headers: { Authorization: token },
       });
       setResults(response.data);
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
   const fetchFees = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/admin/fees", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/admin/fees", {
         headers: { Authorization: token },
       });
       setFees(response.data);
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
   const fetchAllStudents = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/admin/students?limit=1000", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/admin/students?limit=1000", {
         headers: { Authorization: token },
       });
       setAllStudents(response.data.students);
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
   const fetchExamTimeTables = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/exam-timetable", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/exam-timetable", {
         headers: { Authorization: token },
       });
       setExamTimeTables(response.data);
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
   const fetchNotices = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/api/notices", {
+      const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/notices", {
         headers: { Authorization: token },
       });
       setNotices(response.data);
@@ -189,7 +189,7 @@ export default function AdminDashboard() {
   const handleUpdateStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/admin/students/${id}`, { admissionStatus: status }, {
+      await axios.put(`https://college-management-system-nnkd.onrender.com/api/admin/students/${id}`, { admissionStatus: status }, {
         headers: { Authorization: token },
       });
       alert("Status updated successfully");
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
   const handleUpdateFeeStatus = async (id, feePaid) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/admin/students/${id}`, { feePaid }, {
+      await axios.put(`https://college-management-system-nnkd.onrender.com/api/admin/students/${id}`, { feePaid }, {
         headers: { Authorization: token },
       });
       alert("Fee status updated successfully");
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/admin/fees", feeData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/admin/fees", feeData, {
         headers: { Authorization: token },
       });
       alert("Fee request created successfully");
@@ -234,7 +234,7 @@ export default function AdminDashboard() {
   const handleUpdateFee = async (id, paid) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/admin/fees/${id}`, { paid }, {
+      await axios.put(`https://college-management-system-nnkd.onrender.com/api/admin/fees/${id}`, { paid }, {
         headers: { Authorization: token },
       });
       alert("Fee updated successfully");
@@ -249,7 +249,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/exam-timetable", examData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/exam-timetable", examData, {
         headers: { Authorization: token },
       });
       alert("Exam timetable created successfully");
@@ -269,7 +269,7 @@ export default function AdminDashboard() {
     if (window.confirm("Are you sure you want to delete this exam timetable?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/exam-timetable/${id}`, {
+        await axios.delete(`https://college-management-system-nnkd.onrender.com/api/exam-timetable/${id}`, {
           headers: { Authorization: token },
         });
         alert("Exam timetable deleted successfully");
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/notices", noticeData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/notices", noticeData, {
         headers: { Authorization: token },
       });
       alert("Notice created successfully");
@@ -327,7 +327,7 @@ export default function AdminDashboard() {
     if (window.confirm("Are you sure you want to delete this notice?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/notices/${id}`, {
+        await axios.delete(`https://college-management-system-nnkd.onrender.com/api/notices/${id}`, {
           headers: { Authorization: token },
         });
         alert("Notice deleted successfully");
@@ -342,7 +342,7 @@ export default function AdminDashboard() {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/admin/students/${id}`, {
+        await axios.delete(`https://college-management-system-nnkd.onrender.com/api/admin/students/${id}`, {
           headers: { Authorization: token },
         });
         alert("Student deleted successfully");
@@ -359,7 +359,7 @@ export default function AdminDashboard() {
     
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/results/${id}`, {
+      await axios.delete(`https://college-management-system-nnkd.onrender.com/api/results/${id}`, {
         headers: { Authorization: token },
       });
       alert("Result deleted successfully");
@@ -373,7 +373,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/students/register-admin", adminData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/students/register-admin", adminData, {
         headers: { Authorization: token },
       });
       alert("Admin created successfully");
@@ -388,7 +388,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/admin/results", {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/admin/results", {
         studentId: selectedStudent._id,
         ...resultData
       }, {
@@ -411,7 +411,7 @@ export default function AdminDashboard() {
       formData.append("studentId", uploadData.studentId);
       formData.append("admitCard", uploadData.file);
 
-      await axios.post("http://localhost:5000/api/admit-cards/upload", formData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/admit-cards/upload", formData, {
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data"
@@ -433,7 +433,7 @@ export default function AdminDashboard() {
       formData.append("semester", uploadData.semester);
       formData.append("result", uploadData.file);
 
-      await axios.post("http://localhost:5000/api/results/upload", formData, {
+      await axios.post("https://college-management-system-nnkd.onrender.com/api/results/upload", formData, {
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data"
@@ -449,7 +449,7 @@ export default function AdminDashboard() {
   const handleGenerateReport = async (type, format) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:5000/api/admin/reports/${type}?format=${format}`, {
+      const response = await axios.get(`https://college-management-system-nnkd.onrender.com/api/admin/reports/${type}?format=${format}`, {
         headers: { Authorization: token },
         responseType: 'blob',
       });
