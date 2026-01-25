@@ -17,7 +17,8 @@ app.use(express.json());
 const Student = require('./models/Student');
 const bcrypt = require('bcryptjs');
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGODB_URI)
+
   .then(async () => {
     console.log("MongoDB Connected🥳🥳");
     // Create default admin if none exists
