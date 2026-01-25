@@ -165,7 +165,7 @@ Start the backend server:
 ```bash
 npm start
 ```
-> 🚀 **Server will run on:** `http://localhost:5000`
+> 🚀 **Server will run on:** `https://college-management-system-nnkd.onrender.com`
 
 #### 3. 🎨 Frontend Setup
 ```bash
@@ -175,7 +175,7 @@ npm install
 
 Create a `.env` file in the frontend directory (optional):
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=https://college-management-system-nnkd.onrender.com/api
 ```
 
 Start the frontend application:
@@ -186,7 +186,7 @@ npm start
 
 #### 4. 🎯 Access the Application
 - **🎨 Frontend:** [http://localhost:3000](http://localhost:3000)
-- **🔧 Backend API:** [http://localhost:5000](http://localhost:5000)
+- **🔧 Backend API:** [https://college-management-system-nnkd.onrender.com](https://college-management-system-nnkd.onrender.com)
 
 ## 👤 Default Admin Credentials
 
@@ -510,7 +510,7 @@ Response ← Component Update ← Service ← Controller → Model → Database
 
 ### Base URL
 ```
-http://localhost:5000/api
+https://college-management-system-nnkd.onrender.com/api
 ```
 
 ### Authentication
