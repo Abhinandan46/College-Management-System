@@ -8,7 +8,7 @@ export default function AdmissionForm() {
   const navigate = useNavigate();
 
   const submit = async () => {
-    await axios.post("http://localhost:5000/api/students/admission", form, {
+    await axios.post("https://college-management-system-nnkd.onrender.com/api/students/admission", form, {
       headers: { Authorization: localStorage.getItem("token") }
     });
     alert("Admission Submitted");

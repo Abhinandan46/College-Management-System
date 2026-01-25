@@ -16,7 +16,7 @@ export default function ExamTimeTable() {
 
     const fetchTimeTables = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/exam-timetable", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/exam-timetable", {
           headers: { Authorization: token }
         });
         setTimeTables(response.data);

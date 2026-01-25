@@ -17,7 +17,7 @@ export default function Subjects() {
 
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/subjects", {
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/subjects", {
           headers: { Authorization: token }
         });
         setSubjects(response.data);
