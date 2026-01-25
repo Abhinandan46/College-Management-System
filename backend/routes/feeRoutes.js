@@ -1,9 +1,9 @@
 const express = require('express');
-const { getFeeStatus, payFees } = require('../controllers/feeController');
+const { getFeesStatus, payFees } = require('../controllers/feesController');
 const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 
-router.get('/status', auth, getFeeStatus);
+router.get('/status', auth, getFeesStatus);
 router.post('/pay', auth, payFees);
 
 module.exports = router;

@@ -35,6 +35,35 @@ export default function AdminDashboard() {
   const [filteredResults, setFilteredResults] = useState([]);
   const [resultSearchTerm, setResultSearchTerm] = useState('');
 
+  // Fees states
+  const [fees, setFees] = useState([]);
+  const [showCreateFee, setShowCreateFee] = useState(false);
+  const [feeData, setFeeData] = useState({
+    studentId: '',
+    amount: 5000
+  });
+  const [allStudents, setAllStudents] = useState([]);
+
+  // Exam states
+  const [examTimeTables, setExamTimeTables] = useState([]);
+  const [showCreateExam, setShowCreateExam] = useState(false);
+  const [examData, setExamData] = useState({
+    course: '',
+    semester: '',
+    exams: [{ subject: '', date: '', time: '', venue: '' }]
+  });
+
+  // Notice states
+  const [notices, setNotices] = useState([]);
+  const [showCreateNotice, setShowCreateNotice] = useState(false);
+  const [noticeData, setNoticeData] = useState({
+    title: '',
+    content: '',
+    type: 'general',
+    priority: 'medium',
+    expiresAt: ''
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,6 +77,13 @@ export default function AdminDashboard() {
       fetchStudents();
     } else if (activeTab === 'results') {
       fetchResults();
+    } else if (activeTab === 'fees') {
+      fetchFees();
+      fetchAllStudents();
+    } else if (activeTab === 'exams') {
+      fetchExamTimeTables();
+    } else if (activeTab === 'notices') {
+      fetchNotices();
     }
   }, [activeTab, currentPage, searchTerm, courseFilter, statusFilter, feeFilter, resultSearchTerm]);
 
@@ -102,6 +138,54 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchFees = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/api/admin/fees", {
+        headers: { Authorization: token },
+      });
+      setFees(response.data);
+    } catch (error) {
+      console.error("Failed to fetch fees:", error);
+    }
+  };
+
+  const fetchAllStudents = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/api/admin/students?limit=1000", {
+        headers: { Authorization: token },
+      });
+      setAllStudents(response.data.students);
+    } catch (error) {
+      console.error("Failed to fetch all students:", error);
+    }
+  };
+
+  const fetchExamTimeTables = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/api/exam-timetable", {
+        headers: { Authorization: token },
+      });
+      setExamTimeTables(response.data);
+    } catch (error) {
+      console.error("Failed to fetch exam timetables:", error);
+    }
+  };
+
+  const fetchNotices = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/api/notices", {
+        headers: { Authorization: token },
+      });
+      setNotices(response.data);
+    } catch (error) {
+      console.error("Failed to fetch notices:", error);
+    }
+  };
+
   const handleUpdateStatus = async (id, status) => {
     try {
       const token = localStorage.getItem("token");
@@ -127,6 +211,130 @@ export default function AdminDashboard() {
       fetchStats();
     } catch (error) {
       alert("Failed to update fee status");
+    }
+  };
+
+  const handleCreateFee = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/admin/fees", feeData, {
+        headers: { Authorization: token },
+      });
+      alert("Fee request created successfully");
+      setShowCreateFee(false);
+      setFeeData({ studentId: '', amount: 5000 });
+      fetchFees();
+      fetchStats();
+    } catch (error) {
+      alert("Failed to create fee request");
+    }
+  };
+
+  const handleUpdateFee = async (id, paid) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:5000/api/admin/fees/${id}`, { paid }, {
+        headers: { Authorization: token },
+      });
+      alert("Fee updated successfully");
+      fetchFees();
+      fetchStats();
+    } catch (error) {
+      alert("Failed to update fee");
+    }
+  };
+
+  const handleCreateExam = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/exam-timetable", examData, {
+        headers: { Authorization: token },
+      });
+      alert("Exam timetable created successfully");
+      setShowCreateExam(false);
+      setExamData({
+        course: '',
+        semester: '',
+        exams: [{ subject: '', date: '', time: '', venue: '' }]
+      });
+      fetchExamTimeTables();
+    } catch (error) {
+      alert("Failed to create exam timetable");
+    }
+  };
+
+  const handleDeleteExam = async (id) => {
+    if (window.confirm("Are you sure you want to delete this exam timetable?")) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(`http://localhost:5000/api/exam-timetable/${id}`, {
+          headers: { Authorization: token },
+        });
+        alert("Exam timetable deleted successfully");
+        fetchExamTimeTables();
+      } catch (error) {
+        alert("Failed to delete exam timetable");
+      }
+    }
+  };
+
+  const addExamField = () => {
+    setExamData({
+      ...examData,
+      exams: [...examData.exams, { subject: '', date: '', time: '', venue: '' }]
+    });
+  };
+
+  const updateExamField = (index, field, value) => {
+    const updatedExams = examData.exams.map((exam, i) =>
+      i === index ? { ...exam, [field]: value } : exam
+    );
+    setExamData({ ...examData, exams: updatedExams });
+  };
+
+  const removeExamField = (index) => {
+    setExamData({
+      ...examData,
+      exams: examData.exams.filter((_, i) => i !== index)
+    });
+  };
+
+  const handleCreateNotice = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/notices", noticeData, {
+        headers: { Authorization: token },
+      });
+      alert("Notice created successfully");
+      setShowCreateNotice(false);
+      setNoticeData({
+        title: '',
+        content: '',
+        type: 'general',
+        priority: 'medium',
+        expiresAt: ''
+      });
+      fetchNotices();
+    } catch (error) {
+      alert("Failed to create notice");
+    }
+  };
+
+  const handleDeleteNotice = async (id) => {
+    if (window.confirm("Are you sure you want to delete this notice?")) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(`http://localhost:5000/api/notices/${id}`, {
+          headers: { Authorization: token },
+        });
+        alert("Notice deleted successfully");
+        fetchNotices();
+      } catch (error) {
+        alert("Failed to delete notice");
+      }
     }
   };
 
@@ -593,16 +801,16 @@ export default function AdminDashboard() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                               {student.admissionStatus !== 'Approved' && (
-                                <button onClick={() => handleUpdateStatus(student._id, 'Approved')} className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">Approve</button>
+                                <button onClick={() => handleUpdateStatus(student._id, 'Approved')} className="px-3 py-1 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md transition-colors duration-200">Approve</button>
                               )}
                               {student.admissionStatus !== 'Rejected' && (
-                                <button onClick={() => handleUpdateStatus(student._id, 'Rejected')} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Reject</button>
+                                <button onClick={() => handleUpdateStatus(student._id, 'Rejected')} className="px-3 py-1 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-200">Reject</button>
                               )}
-                              <button onClick={() => handleUpdateFeeStatus(student._id, !student.feePaid)} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                              <button onClick={() => handleUpdateFeeStatus(student._id, !student.feePaid)} className="px-3 py-1 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-200">
                                 {student.feePaid ? 'Mark Unpaid' : 'Mark Paid'}
                               </button>
-                              <button onClick={() => { setSelectedStudent(student); setShowAddResult(true); }} className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300">Add Result</button>
-                              <button onClick={() => handleDelete(student._id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Delete</button>
+                              <button onClick={() => { setSelectedStudent(student); setShowAddResult(true); }} className="px-3 py-1 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-md transition-colors duration-200">Add Result</button>
+                              <button onClick={() => handleDelete(student._id)} className="px-3 py-1 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-200">Delete</button>
                             </td>
                           </tr>
                         ))}
@@ -828,6 +1036,16 @@ export default function AdminDashboard() {
 
         {activeTab === 'fees' && (
           <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Fee Management</h2>
+              <button
+                onClick={() => setShowCreateFee(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Create Fee Request
+              </button>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <div className="flex items-center">
@@ -836,7 +1054,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Fees Paid</h3>
-                    <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.fees?.paidStudents || 0}</p>
+                    <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.fees?.paid || 0}</p>
                   </div>
                 </div>
               </div>
@@ -847,14 +1065,91 @@ export default function AdminDashboard() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Fees Pending</h3>
-                    <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.fees?.pendingStudents || 0}</p>
+                    <p className="text-3xl font-bold text-red-600 dark:text-red-400">{stats.fees?.pending || 0}</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-              <p className="text-gray-600 dark:text-gray-400">Use the Students tab to update individual fee statuses.</p>
-              <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">Click the "Mark Paid" or "Mark Unpaid" buttons next to each student.</p>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">All Fee Records</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Student
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Payment Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {fees.map((fee) => (
+                      <tr key={fee._id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {fee.studentId?.name || 'N/A'}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {fee.studentId?.email || 'N/A'}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          ₹{fee.amount}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            fee.paid
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                              : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                          }`}>
+                            {fee.paid ? 'Paid' : 'Pending'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {fee.paymentDate ? new Date(fee.paymentDate).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          {!fee.paid && (
+                            <button
+                              onClick={() => handleUpdateFee(fee._id, true)}
+                              className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 mr-4"
+                            >
+                              Mark Paid
+                            </button>
+                          )}
+                          {fee.paid && (
+                            <button
+                              onClick={() => handleUpdateFee(fee._id, false)}
+                              className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                            >
+                              Mark Unpaid
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {fees.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">No fee records found</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -906,20 +1201,180 @@ export default function AdminDashboard() {
         )}
 
         {activeTab === 'notices' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <div className="text-6xl mb-4">📣</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Notice Management</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">Create and manage important notices and announcements for students.</p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">Notice creation and management is available through the main navigation.</p>
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Notice Management</h2>
+              <button
+                onClick={() => setShowCreateNotice(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Create Notice
+              </button>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">All Notices</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Title
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Type
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Priority
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Created
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Expires
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {notices.map((notice) => (
+                      <tr key={notice._id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {notice.title}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                            {notice.content.substring(0, 50)}...
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            notice.type === 'exam' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                            notice.type === 'fee' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                            notice.type === 'admission' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                            'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                          }`}>
+                            {notice.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            notice.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                            notice.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                            'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          }`}>
+                            {notice.priority}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(notice.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {notice.expiresAt ? new Date(notice.expiresAt).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => handleDeleteNotice(notice._id)}
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {notices.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">No notices found</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
         {activeTab === 'exams' && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <div className="text-6xl mb-4">📅</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Exam Management</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">Create and manage examination schedules and time tables.</p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">Exam time table creation and management is available through the main navigation.</p>
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Exam Management</h2>
+              <button
+                onClick={() => setShowCreateExam(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                Create Exam Timetable
+              </button>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">Exam Timetables</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Course
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Semester
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Exams
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Created
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {examTimeTables.map((timetable) => (
+                      <tr key={timetable._id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                          {timetable.course}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {timetable.semester}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                          <div className="space-y-1">
+                            {timetable.exams.map((exam, index) => (
+                              <div key={index} className="text-xs">
+                                <strong>{exam.subject}</strong> - {new Date(exam.date).toLocaleDateString()} at {exam.time} ({exam.venue})
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(timetable.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => handleDeleteExam(timetable._id)}
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {examTimeTables.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 dark:text-gray-400">No exam timetables found</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -986,6 +1441,302 @@ export default function AdminDashboard() {
                       type="button"
                       onClick={() => setShowCreateAdmin(false)}
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Fee Modal */}
+        {showCreateFee && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75" onClick={() => setShowCreateFee(false)}></div>
+              </div>
+              <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form onSubmit={handleCreateFee}>
+                  <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                        <span className="text-green-600 dark:text-green-400">💰</span>
+                      </div>
+                      <h3 className="ml-3 text-lg font-medium text-gray-900 dark:text-white">Create Fee Request</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Student</label>
+                        <select
+                          value={feeData.studentId}
+                          onChange={(e) => setFeeData({ ...feeData, studentId: e.target.value })}
+                          required
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+                        >
+                          <option value="">Select a student</option>
+                          {allStudents.map((student) => (
+                            <option key={student._id} value={student._id}>
+                              {student.name} - {student.email} ({student.course})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount (₹)</label>
+                        <input
+                          type="number"
+                          value={feeData.amount}
+                          onChange={(e) => setFeeData({ ...feeData, amount: parseInt(e.target.value) })}
+                          required
+                          min="0"
+                          placeholder="Enter fee amount"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Create Fee Request
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateFee(false)}
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Exam Modal */}
+        {showCreateExam && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75" onClick={() => setShowCreateExam(false)}></div>
+              </div>
+              <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <form onSubmit={handleCreateExam}>
+                  <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 dark:text-blue-400">📅</span>
+                      </div>
+                      <h3 className="ml-3 text-lg font-medium text-gray-900 dark:text-white">Create Exam Timetable</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Course</label>
+                          <input
+                            type="text"
+                            value={examData.course}
+                            onChange={(e) => setExamData({ ...examData, course: e.target.value })}
+                            required
+                            placeholder="e.g., Computer Science"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+                          <input
+                            type="number"
+                            value={examData.semester}
+                            onChange={(e) => setExamData({ ...examData, semester: parseInt(e.target.value) })}
+                            required
+                            min="1"
+                            max="8"
+                            placeholder="1-8"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Exams</label>
+                          <button
+                            type="button"
+                            onClick={addExamField}
+                            className="text-blue-600 hover:text-blue-800 text-sm"
+                          >
+                            + Add Exam
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {examData.exams.map((exam, index) => (
+                            <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                              <div className="grid grid-cols-2 gap-3 mb-2">
+                                <input
+                                  type="text"
+                                  placeholder="Subject"
+                                  value={exam.subject}
+                                  onChange={(e) => updateExamField(index, 'subject', e.target.value)}
+                                  required
+                                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                />
+                                <input
+                                  type="date"
+                                  value={exam.date}
+                                  onChange={(e) => updateExamField(index, 'date', e.target.value)}
+                                  required
+                                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                />
+                              </div>
+                              <div className="grid grid-cols-2 gap-3">
+                                <input
+                                  type="time"
+                                  value={exam.time}
+                                  onChange={(e) => updateExamField(index, 'time', e.target.value)}
+                                  required
+                                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                />
+                                <div className="flex space-x-2">
+                                  <input
+                                    type="text"
+                                    placeholder="Venue"
+                                    value={exam.venue}
+                                    onChange={(e) => updateExamField(index, 'venue', e.target.value)}
+                                    required
+                                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                  />
+                                  {examData.exams.length > 1 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => removeExamField(index)}
+                                      className="px-3 py-2 text-red-600 hover:text-red-800"
+                                    >
+                                      ✕
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Create Timetable
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateExam(false)}
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Create Notice Modal */}
+        {showCreateNotice && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75" onClick={() => setShowCreateNotice(false)}></div>
+              </div>
+              <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form onSubmit={handleCreateNotice}>
+                  <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                        <span className="text-blue-600 dark:text-blue-400">📣</span>
+                      </div>
+                      <h3 className="ml-3 text-lg font-medium text-gray-900 dark:text-white">Create Notice</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                        <input
+                          type="text"
+                          value={noticeData.title}
+                          onChange={(e) => setNoticeData({ ...noticeData, title: e.target.value })}
+                          required
+                          placeholder="Enter notice title"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Content</label>
+                        <textarea
+                          value={noticeData.content}
+                          onChange={(e) => setNoticeData({ ...noticeData, content: e.target.value })}
+                          required
+                          rows="4"
+                          placeholder="Enter notice content"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
+                          <select
+                            value={noticeData.type}
+                            onChange={(e) => setNoticeData({ ...noticeData, type: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                          >
+                            <option value="general">General</option>
+                            <option value="exam">Exam</option>
+                            <option value="fee">Fee</option>
+                            <option value="admission">Admission</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+                          <select
+                            value={noticeData.priority}
+                            onChange={(e) => setNoticeData({ ...noticeData, priority: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                          >
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expires At (Optional)</label>
+                        <input
+                          type="datetime-local"
+                          value={noticeData.expiresAt}
+                          onChange={(e) => setNoticeData({ ...noticeData, expiresAt: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Create Notice
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowCreateNotice(false)}
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                     >
                       Cancel
                     </button>

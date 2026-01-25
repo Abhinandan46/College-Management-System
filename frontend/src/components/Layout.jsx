@@ -10,6 +10,8 @@ const Layout = ({ children, userType = 'student' }) => {
     { name: 'Dashboard', path: '/dashboard', icon: '📊' },
     { name: 'Admission Form', path: '/admission', icon: '📝' },
     { name: 'Fees Payment', path: '/fees', icon: '💳' },
+    { name: 'Exam Time Table', path: '/exam-timetable', icon: '📅' },
+    { name: 'Notices', path: '/notices', icon: '📢' },
     { name: 'Results', path: '/results', icon: '📈' },
     { name: 'Admit Card', path: '/admit-card', icon: '🪪' },
     { name: 'Profile', path: '/profile', icon: '👤' },

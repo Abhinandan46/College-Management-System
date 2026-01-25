@@ -10,12 +10,12 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-username/college-management-system)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/your-username/college-management-system)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/your-username/college-management-system)
 
 ---
 
-**A comprehensive web-based college management system built with the MERN stack** 🚀
+**A comprehensive web-based college management system built with the MERN stack, featuring advanced fee management, exam scheduling, notice publishing, and complete administrative control.** 🚀
 
 [📖 View Demo](#-demo) • [📋 Features](#-features) • [🚀 Quick Start](#-installation--setup) • [📚 Documentation](#-api-documentation)
 
@@ -46,6 +46,9 @@
 
 | Feature | Description | Status |
 |---------|-------------|--------|
+| 💰 **Advanced Fee Management** | Admin fee request creation, payment tracking, and status management | ✅ Complete |
+| 📅 **Exam Management System** | Create and manage exam timetables with multiple subjects | ✅ Complete |
+| 📢 **Notice Management** | Admin notice creation with priority levels and categories | ✅ Complete |
 | 🎨 **Modern UI Redesign** | Complete overhaul with Tailwind CSS, gradients, icons, and animations | ✅ Complete |
 | 🆔 **Student ID System** | Automatic generation and display of unique student IDs (STU-YYYY-NNNN) | ✅ Complete |
 | 📄 **PDF Result Downloads** | Professional PDF generation for student results | ✅ Complete |
@@ -54,21 +57,6 @@
 
 </div>
 
----
-
-## 🎬 Demo
-
-<div align="center">
-
-### 📸 Screenshots
-
-| Login Page | Dashboard | Admin Panel |
-|------------|-----------|-------------|
-| ![Login](https://via.placeholder.com/300x200/6366f1/ffffff?text=Login+Page) | ![Dashboard](https://via.placeholder.com/300x200/8b5cf6/ffffff?text=Dashboard) | ![Admin](https://via.placeholder.com/300x200/06b6d4/ffffff?text=Admin+Panel) |
-
-*🚀 **Live Demo:** [View Application](https://your-demo-url.com)*
-
-</div>
 
 ---
 
@@ -198,7 +186,7 @@ npm start
 
 | Field | Value |
 |-------|-------|
-| 📧 **Email** | `admin@college.edu` |
+| 📧 **Email** | `admin@college.com` |
 | 🔒 **Password** | `admin123` |
 
 > ⚠️ **Important:** Change the default password after first login for security!
@@ -227,8 +215,8 @@ college-management-system/
 │   │   ├── adminController.js          # 👑 Admin operations (CRUD, reports)
 │   │   ├── admitCardController.js      # 📄 Admit card generation
 │   │   ├── examTimeTableController.js  # 📅 Exam schedule management
-│   │   ├── feeController.js            # 💰 Fee payment handling
-│   │   ├── feesController.js           # 💳 Fee status management
+│   │   ├── feeController.js            # 💰 Legacy fee payment handling
+│   │   ├── feesController.js           # 💳 Advanced fee status management
 │   │   ├── noticeController.js         # 📢 Notice/announcement system
 │   │   ├── resultController.js         # 📊 Result management & PDF generation
 │   │   ├── studentController.js        # 👨‍🎓 Student profile & authentication
@@ -250,8 +238,8 @@ college-management-system/
 │   │   ├── adminRoutes.js             # 👑 Admin-only endpoints
 │   │   ├── admitCardRoutes.js         # 📄 Admit card routes
 │   │   ├── examTimeTableRoutes.js     # 📅 Exam timetable routes
-│   │   ├── feeRoutes.js               # 💰 Fee management routes
-│   │   ├── feesRoutes.js              # 💳 Fee status routes
+│   │   ├── feeRoutes.js               # 💰 Student fee management routes
+│   │   ├── feesRoutes.js              # 💳 Alternative fee routes implementation
 │   │   ├── noticeRoutes.js            # 📢 Notice routes
 │   │   ├── resultRoutes.js            # 📊 Result management routes
 │   │   ├── studentRoutes.js           # 👨‍🎓 Student routes
@@ -392,6 +380,8 @@ college-management-system/
 - **Financial Overview**: Dashboard statistics for fee collection
 - **Payment History**: Track payment dates and amounts
 - **Outstanding Balance Monitoring**: Identify students with pending payments
+- **Fee Request Creation**: Admin can create fee requests for students
+- **Bulk Fee Management**: Handle multiple fee requests efficiently
 
 ### 📝 Results Management
 - **Result Upload**: Add semester-wise results for students
@@ -452,6 +442,13 @@ college-management-system/
 - `DELETE /api/admin/results/:id` - Delete student result
 - `GET /api/admin/reports/students` - Generate students report (PDF/Excel)
 - `GET /api/admin/reports/fees` - Generate fees report (PDF/Excel)
+- `POST /api/admin/fees` - Create fee request for student (admin)
+- `GET /api/admin/fees` - Get all fees (admin)
+- `PUT /api/admin/fees/:id` - Update fee status (admin)
+
+### Fee Routes
+- `GET /api/fees/status` - Get student's fee status and history
+- `POST /api/fees/pay` - Pay specific fee (student)
 
 ### Exam Time Table Routes
 - `GET /api/exam-timetable` - Get exam time tables
@@ -487,7 +484,24 @@ college-management-system/
 - **Profile Display**: Student IDs visible in profile and throughout the system
 - **Database Integration**: IDs stored and managed in MongoDB
 
-### Enhanced Results System
+### Enhanced Fee Management System
+- **Admin Fee Creation**: Administrators can create fee requests for individual students
+- **Payment Tracking**: Students can view pending and paid fees with detailed history
+- **Status Management**: Real-time fee status updates and payment confirmations
+- **Financial Overview**: Dashboard statistics for fee collection and outstanding balances
+- **Secure Payments**: JWT-protected payment processing with fee-specific handling
+
+### Exam Management System
+- **Timetable Creation**: Admin can create comprehensive exam schedules
+- **Multi-Subject Support**: Handle multiple subjects per exam schedule
+- **Student Access**: Students can view their exam timetables
+- **Calendar Integration**: Organized display of examination schedules
+
+### Notice Management System
+- **Priority-Based Notices**: Create notices with different priority levels
+- **Category Organization**: General, exam, fee, and admission-related announcements
+- **Expiration Management**: Set notice expiry dates for time-sensitive information
+- **Student Notifications**: Students receive important updates and announcements
 - **PDF Downloads**: Students can download their results as PDF documents
 - **Admin Management**: Administrators can view, add, update, and delete results
 - **Grade Calculation**: Automatic grade assignment based on percentage
@@ -577,6 +591,21 @@ If you find this project helpful, please give it a ⭐️ on GitHub!
 ## 🙏 Acknowledgments
 
 <div align="center">
+
+## ✨ What's New in v1.1.0
+
+### 🚀 Major Features Added
+- **💰 Advanced Fee Management**: Admin can create fee requests, students can track payments
+- **📅 Exam Management**: Complete exam timetable creation and management system
+- **📢 Notice Management**: Priority-based notice system for important announcements
+- **🎨 Enhanced UI**: Improved responsive design with modern Tailwind CSS styling
+
+### 🐛 Bug Fixes
+- Fixed fee request visibility for students
+- Resolved API routing inconsistencies
+- Improved error handling and loading states
+
+---
 
 ### 🎯 Special Thanks
 
