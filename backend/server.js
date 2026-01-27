@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 const studentRoutes = require('./routes/studentRoutes');
 const feeRoutes = require('./routes/feeRoutes');
@@ -11,7 +13,18 @@ const subjectRoutes = require('./routes/subjectRoutes');
 const admitCardRoutes = require('./routes/admitCardRoutes');
 const resultRoutes = require('./routes/resultRoutes');
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://college-management-system-nnkd.onrender.com'],
+  credentials: true,
+};
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+});
+app.use(limiter);
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.json());
 
 const Student = require('./models/Student');
