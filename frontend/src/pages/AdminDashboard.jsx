@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from '../components/Layout';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 
 export default function AdminDashboard() {
   const [searchParams] = useSearchParams();
@@ -504,50 +505,61 @@ export default function AdminDashboard() {
     <Layout userType="admin">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-              Comprehensive college management system overview
-            </p>
-          </div>
-          <div className="mt-4 sm:mt-0 flex space-x-3">
-            <button
-              onClick={() => setShowCreateAdmin(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-            >
-              <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Create Admin
-            </button>
-            <button
-              onClick={() => navigate('/')}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-            >
-              <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              Logout
-            </button>
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-xl shadow-lg p-6 text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-4 sm:mb-0">
+              <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+              <p className="text-indigo-100 text-lg">
+                Welcome back! Here's your comprehensive college management overview
+              </p>
+              <div className="mt-4 flex items-center space-x-4">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                  <span className="text-sm text-indigo-100">System Online</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-sm text-indigo-100">Last updated: {new Date().toLocaleDateString()}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowCreateAdmin(true)}
+                className="inline-flex items-center px-6 py-3 border border-white/20 rounded-lg shadow-sm text-sm font-medium text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200 transform hover:scale-105"
+              >
+                <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Create Admin
+              </button>
+              <button
+                onClick={() => navigate('/')}
+                className="inline-flex items-center px-6 py-3 border border-white/20 rounded-lg shadow-sm text-sm font-medium text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200 transform hover:scale-105"
+              >
+                <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-1">
-          <nav className="flex space-x-1">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-2 backdrop-blur-sm bg-white/80 dark:bg-gray-800/80">
+          <nav className="flex space-x-2">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                className={`flex-1 flex items-center justify-center px-4 py-4 text-sm font-medium rounded-lg transition-all duration-300 transform hover:scale-105 ${
                   activeTab === tab.id
-                    ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 shadow-sm'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.label}
+                <span className="mr-3 text-lg">{tab.icon}</span>
+                <span className="font-semibold">{tab.label}</span>
               </button>
             ))}
           </nav>
@@ -558,50 +570,70 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                    <span className="text-blue-600 dark:text-blue-400 text-xl">👥</span>
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-100 text-sm font-medium">Total Students</p>
+                    <p className="text-3xl font-bold mt-1">{stats.students?.total || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Students</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.students?.total || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">👥</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: '100%'}}></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                    <span className="text-green-600 dark:text-green-400 text-xl">✅</span>
+              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-green-100 text-sm font-medium">Approved</p>
+                    <p className="text-3xl font-bold mt-1">{stats.students?.approved || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Approved</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.students?.approved || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">✅</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: `${stats.students?.total ? (stats.students.approved / stats.students.total) * 100 : 0}%`}}></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-                    <span className="text-yellow-600 dark:text-yellow-400 text-xl">⏳</span>
+              <div className="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-yellow-100 text-sm font-medium">Pending</p>
+                    <p className="text-3xl font-bold mt-1">{stats.students?.pending || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.students?.pending || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">⏳</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: `${stats.students?.total ? (stats.students.pending / stats.students.total) * 100 : 0}%`}}></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                    <span className="text-red-600 dark:text-red-400 text-xl">❌</span>
+              <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-red-100 text-sm font-medium">Rejected</p>
+                    <p className="text-3xl font-bold mt-1">{stats.students?.rejected || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Rejected</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.students?.rejected || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">❌</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: `${stats.students?.total ? (stats.students.rejected / stats.students.total) * 100 : 0}%`}}></div>
                   </div>
                 </div>
               </div>
@@ -609,84 +641,175 @@ export default function AdminDashboard() {
 
             {/* Additional Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
-                    <span className="text-emerald-600 dark:text-emerald-400 text-xl">💰</span>
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-emerald-100 text-sm font-medium">Fees Paid</p>
+                    <p className="text-3xl font-bold mt-1">{stats.fees?.paidStudents || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Fees Paid</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.fees?.paidStudents || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">💰</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: `${(stats.fees?.paidStudents || 0) + (stats.fees?.pendingStudents || 0) > 0 ? ((stats.fees?.paidStudents || 0) / ((stats.fees?.paidStudents || 0) + (stats.fees?.pendingStudents || 0))) * 100 : 0}%`}}></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
-                    <span className="text-orange-600 dark:text-orange-400 text-xl">💸</span>
+              <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-100 text-sm font-medium">Fees Pending</p>
+                    <p className="text-3xl font-bold mt-1">{stats.fees?.pendingStudents || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Fees Pending</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.fees?.pendingStudents || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">💸</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: `${(stats.fees?.paidStudents || 0) + (stats.fees?.pendingStudents || 0) > 0 ? ((stats.fees?.pendingStudents || 0) / ((stats.fees?.paidStudents || 0) + (stats.fees?.pendingStudents || 0))) * 100 : 0}%`}}></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center">
-                    <span className="text-teal-600 dark:text-teal-400 text-xl">📊</span>
+              <div className="bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-100 text-sm font-medium">Total Results</p>
+                    <p className="text-3xl font-bold mt-1">{stats.results || 0}</p>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Results</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.results || 0}</p>
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <span className="text-2xl">📊</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full" style={{width: '100%'}}></div>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Student Status Distribution */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Student Status Distribution</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Approved', value: stats.students?.approved || 0, color: '#10B981' },
+                        { name: 'Pending', value: stats.students?.pending || 0, color: '#F59E0B' },
+                        { name: 'Rejected', value: stats.students?.rejected || 0, color: '#EF4444' }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {[
+                        { name: 'Approved', value: stats.students?.approved || 0, color: '#10B981' },
+                        { name: 'Pending', value: stats.students?.pending || 0, color: '#F59E0B' },
+                        { name: 'Rejected', value: stats.students?.rejected || 0, color: '#EF4444' }
+                      ].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center space-x-6 mt-4">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Approved</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Pending</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Rejected</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Fee Status Chart */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Fee Payment Status</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={[
+                      { name: 'Paid', value: stats.fees?.paidStudents || 0, color: '#10B981' },
+                      { name: 'Pending', value: stats.fees?.pendingStudents || 0, color: '#EF4444' }
+                    ]}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
             {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-xl shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                <span className="mr-2">⚡</span>
+                Quick Actions
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <button
                   onClick={() => setActiveTab('students')}
-                  className="flex items-center p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-200 group"
+                  className="group bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 text-xl">👨‍🎓</span>
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                      <span className="text-white text-xl">👨‍🎓</span>
+                    </div>
+                    <div className="text-left">
+                      <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Manage Students</h4>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <h4 className="font-medium text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Manage Students</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Add, update, or remove student records</p>
-                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-left">Add, update, or remove student records with ease</p>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('results')}
-                  className="flex items-center p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-200 group"
+                  className="group bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-green-400 dark:hover:border-green-500 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 text-xl">📝</span>
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                      <span className="text-white text-xl">📝</span>
+                    </div>
+                    <div className="text-left">
+                      <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400">Upload Results</h4>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <h4 className="font-medium text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Upload Results</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Add and manage student results</p>
-                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-left">Add and manage student results efficiently</p>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('reports')}
-                  className="flex items-center p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-200 group"
+                  className="group bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-lg flex items-center justify-center mr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 text-xl">📄</span>
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                      <span className="text-white text-xl">📄</span>
+                    </div>
+                    <div className="text-left">
+                      <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400">Generate Reports</h4>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <h4 className="font-medium text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Generate Reports</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Export data in PDF or Excel format</p>
-                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-left">Export comprehensive data in PDF or Excel format</p>
                 </button>
               </div>
             </div>
