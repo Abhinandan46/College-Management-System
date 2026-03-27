@@ -17,7 +17,7 @@
 
 **A comprehensive web-based college management system built with the MERN stack, featuring advanced fee management, exam scheduling, notice publishing, and complete administrative control.** 🚀
 
-[📖 View Demo](#-demo) • [📋 Features](#-features) • [🚀 Quick Start](#-installation--setup) • [📚 Documentation](#-api-documentation)
+[📖 View Demo](https://college-management-system-1-cev6.onrender.com/) • [📋 Features](#-features) • [🚀 Quick Start](#-installation--setup) • [📚 Documentation](#-api-documentation)
 
 ---
 
