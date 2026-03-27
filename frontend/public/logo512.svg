@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1F2937" rx="100"/>
+  
+  <!-- Books -->
+  <rect x="100" y="240" width="90" height="160" fill="#EF4444" rx="5"/>
+  <rect x="120" y="220" width="90" height="160" fill="#F97316" rx="5"/>
+  <rect x="302" y="240" width="90" height="160" fill="#3B82F6" rx="5"/>
+  <rect x="322" y="220" width="90" height="160" fill="#0EA5E9" rx="5"/>
+  
+  <!-- Graduation Cap -->
+  <path d="M 150 180 L 256 100 L 362 180 Z" fill="#1F2937" stroke="#FBBF24" stroke-width="8"/>
+  <rect x="150" y="180" width="212" height="20" fill="#1F2937" stroke="#FBBF24" stroke-width="8"/>
+  
+  <!-- Cap Tassel -->
+  <line x1="256" y1="200" x2="256" y2="310" stroke="#FBBF24" stroke-width="8"/>
+  <circle cx="256" cy="325" r="12" fill="#FBBF24"/>
+</svg>

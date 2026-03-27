@@ -2,40 +2,33 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Layout from '../components/Layout';
+import { useAuth } from '../AuthContext';
 
 export default function Dashboard() {
   const [student, setStudent] = useState(null);
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/");
-      return;
-    }
-
     const fetchProfile = async () => {
       try {
-        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/profile", {
-          headers: { Authorization: token }
-        });
+        const response = await axios.get("https://college-management-system-nnkd.onrender.com/api/students/profile");
         setStudent(response.data);
       } catch (error) {
         alert("Failed to load profile");
-        navigate("/");
       }
     };
 
     fetchProfile();
-  }, [navigate]);
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 
   if (!student) return (
-    <Layout userType="student">
+    <Layout>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
@@ -159,7 +152,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <Layout userType="student">
+    <Layout>
       {/* Top Header Bar with Student Profile */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

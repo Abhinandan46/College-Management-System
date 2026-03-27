@@ -2,12 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,8 +19,9 @@ export default function Login() {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token);
-      const decoded = jwtDecode(response.data.token);
+      const token = response.data.token;
+      login(token);
+      const decoded = jwtDecode(token);
       if (decoded.role === 'admin') {
         navigate("/admin/dashboard");
       } else {

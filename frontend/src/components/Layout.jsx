@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
-const Layout = ({ children, userType = 'student' }) => {
+const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024); // lg breakpoint
   const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
+  const userType = user?.role === 'admin' ? 'admin' : 'student';
 
   const studentNavItems = [
     { name: 'Dashboard', path: '/dashboard', icon: '📊' },

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from '../components/Layout';
+import { useAuth } from '../AuthContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 
 export default function AdminDashboard() {
@@ -17,6 +18,7 @@ export default function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { logout } = useAuth();
 
   // Modal states
   const [showCreateAdmin, setShowCreateAdmin] = useState(false);
@@ -502,7 +504,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <Layout userType="admin">
+    <Layout>
       <div className="space-y-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-xl shadow-lg p-6 text-white">
@@ -533,7 +535,7 @@ export default function AdminDashboard() {
                 Create Admin
               </button>
               <button
-                onClick={() => navigate('/')}
+                onClick={logout}
                 className="inline-flex items-center px-6 py-3 border border-white/20 rounded-lg shadow-sm text-sm font-medium text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200 transform hover:scale-105"
               >
                 <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
